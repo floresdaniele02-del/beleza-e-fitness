@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const res = await fetch(
-    "https://api.mercadolibre.com/sites/MLB/search?q=suplemento&limit=12"
-  );
+  try {
+    const res = await fetch(
+      "https://api.mercadolibre.com/sites/MLB/search?q=suplemento&limit=12",
+      { cache: "no-store" }
+    );
 
-  const data = await res.json();
+    if (!res.ok) {
+      return NextResponse.json({ error: "Erro ao buscar ML" }, { status: 500 });
+    }
 
-  return NextResponse.json(data.results);
+    const data = await res.json();
+
+    return NextResponse.json(data.results || []);
+  } catch (err) {
+    return NextResponse.json({ error: "Falha interna" }, { status: 500 });
+  }
 }
 
