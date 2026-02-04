@@ -1,12 +1,15 @@
-import Image from "next/image";
+"use client";
 
-export default async function Home() {
-  const res = await fetch(
-    "https://api.mercadolibre.com/sites/MLB/search?q=suplemento&limit=12",
-    { cache: "no-store" }
-  );
+import { useEffect, useState } from "react";
 
-  const data = await res.json();
+export default function Home() {
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/mercadolivre/produtos")
+      .then(res => res.json())
+      .then(data => setProdutos(data));
+  }, []);
 
   return (
     <main style={{ padding: 20 }}>
@@ -18,18 +21,13 @@ export default async function Home() {
         gap: 20,
         marginTop: 20
       }}>
-        {data.results.map((p: any) => (
+        {produtos.map((p: any) => (
           <div key={p.id} style={{
             border: "1px solid #ddd",
             borderRadius: 10,
             padding: 10
           }}>
-            <Image
-              src={p.thumbnail.replace('http://', 'https://')}
-              alt={p.title}
-              width={200}
-              height={200}
-            />
+            <img src={p.thumbnail} width="100%" />
             <h3>{p.title}</h3>
             <p>R$ {p.price}</p>
             <a href={p.permalink} target="_blank">Ver produto</a>
