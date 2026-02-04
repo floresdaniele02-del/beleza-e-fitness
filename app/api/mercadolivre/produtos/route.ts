@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const res = await fetch(
-      "https://api.mercadolibre.com/sites/MLB/search?q=suplemento&limit=12",
+      "https://api.mercadolibre.com/sites/MLB/search?q=creatina&limit=12"
+,
       {
         headers: {
           "User-Agent": "Mozilla/5.0",
